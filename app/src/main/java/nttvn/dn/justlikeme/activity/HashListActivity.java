@@ -3,7 +3,7 @@ package nttvn.dn.justlikeme.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,6 +26,7 @@ import java.util.Random;
 
 import nttvn.dn.justlikeme.Home;
 import nttvn.dn.justlikeme.R;
+import nttvn.dn.justlikeme.common.Constants;
 
 /**
  * Created by NinHN on 3/10/16.
@@ -35,6 +36,7 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
     private static final String TAG = HashListActivity.class.getSimpleName();
 
     private AutoCompleteTextView autoCompleteTextView;
+    private TextView textViewSelected;
     private Adapter adapter;
 
     private FlowLayout mHashtagContainer;
@@ -46,7 +48,7 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
         setContentView(R.layout.activity_hashtag);
         // Set up the login form.
         autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.auto_text_input);
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.hashtag_item, getlistHashHint());
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.hashtag_hint, getlistHashHint());
 
         autoCompleteTextView.setThreshold(1);
         autoCompleteTextView.setAdapter(adapter);
@@ -60,6 +62,7 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //TODO: Request get hash list
 
             }
 
@@ -87,11 +90,16 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String selected = ((TextView) view).getText().toString();
         Toast.makeText(this, "Da chon " + selected, Toast.LENGTH_LONG).show();
-        mHashtagContainer.addView(addTextViewHash(selected));
 
+        autoCompleteTextView.setText(Constants.BLANK);
+        textViewSelected = addTextViewHash(selected);
+        mHashtagContainer.addView(textViewSelected);
+        applyTaDaAnimation(textViewSelected);
     }
 
     private void updateBuddyHash() {
+        //TODO: send hashlist to server
+
 
     }
 
@@ -105,7 +113,7 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private String[] getlistHashHint() {
-        String[] nameList = {"NinHN", "KhanhHT", "LinhDB", "NamNV"};
+        String[] nameList = {"NinHN", "KhanhHT", "LinhDB", "NamNV", "HoangMN"};
         return nameList;
     }
 
@@ -137,8 +145,17 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
 //        }
     }
 
-    private void removeHash(View v) {
-        mHashtagContainer.removeView(v);
+    private void removeHash(final View v) {
+
+        applyHideAnimation(v);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                mHashtagContainer.removeView(v);
+            }
+        }, 700);
     }
 
     private int getRandomHashtagColor(Context context) {
@@ -161,18 +178,23 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
 
     private void applyTaDaAnimation(final View targetView) {
         YoYo.with(Techniques.Tada)
-                .duration(600)
+                .duration(800)
+                .playOn(targetView);
+    }
+
+    private void applyHideAnimation(final View targetView) {
+        YoYo.with(Techniques.ZoomOut)
+                .duration(800)
                 .playOn(targetView);
     }
 
     private TextView addTextViewHash(final String hashtag) {
         FlowLayout.LayoutParams hashTagLayoutParams = new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT, FlowLayout.LayoutParams.WRAP_CONTENT);
         hashTagLayoutParams.setMargins(16, 16, 16, 16);
-
         TextView textView = (TextView) getLayoutInflater().inflate(R.layout.hashtag_item, null);
         textView.setText("#" + hashtag);
         textView.setBackgroundColor(getRandomHashtagColor(this));
-        textView.setContentDescription("0");
+        //textView.setContentDescription("0");
         textView.setLayoutParams(hashTagLayoutParams);
         textView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -191,4 +213,6 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
         });
         return textView;
     }
+
+
 }

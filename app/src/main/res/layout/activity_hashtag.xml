@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="#Input your hobby" />
+        android:hint="#Input your hobby"/>
 
     <com.wefika.flowlayout.FlowLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/hashtag_container"
@@ -28,6 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/holo_blue_bright"
+        android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"
         android:text="@string/enter" />
 

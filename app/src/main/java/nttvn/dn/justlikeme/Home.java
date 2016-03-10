@@ -39,11 +39,16 @@ public class Home extends AppCompatActivity {
 
         //Check user exist
         buddy = MyApplication.getInstance().getPrefManager().getBuddy();
+//        if (buddy == null) {
+//            //Next to hashlist screen
+//            Intent intent = new Intent(Home.this, LoginActivity.class);
+//            startActivity(intent);
+//        }
+        //Dummy buddy
         if (buddy == null) {
-            //Next to hashlist screen
-            Intent intent = new Intent(Home.this, LoginActivity.class);
-            startActivity(intent);
+            buddy = new Buddy("1234567890", "Nin Dep Trai");
         }
+        MyApplication.getInstance().getPrefManager().storeBuddy(buddy);
 
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -82,7 +87,7 @@ public class Home extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.action_20m:
                 getSupportActionBar().setTitle(buddy.getName() + " - nearly " + getString(R.string.action_20m));
                 break;
