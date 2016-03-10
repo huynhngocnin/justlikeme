@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/person_line_height"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/icon_highlight"
+        android:layout_width="@dimen/person_icon_width"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/person_row_margin"
+        android:gravity="center_vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/person_icon_width"
+            android:layout_gravity="center"
+            android:background="@drawable/icon_cycle_style" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@+id/layout_action_right"
+        android:layout_toRightOf="@+id/icon_highlight"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/text_person_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/person_line_padding"
+            android:singleLine="true"
+            android:text="Nin "
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/person_name_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_person_hashtag"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/person_line_padding"
+            android:singleLine="true"
+            android:text="#hashtag 1, #hashtag 2..."
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/person_hashtag_list_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_action_right"
+        android:layout_width="@dimen/person_poke_weight"
+        android:layout_height="@dimen/person_poke_height"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/icon_poke_style">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/poke"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>
+

@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">JustLikeMe</string>
+    <string name="action_20m">20m</string>
+    <string name="action_50m">50m</string>
+    <string name="action_100m">100m</string>
+    <string name="action_edit">Edit</string>
+
+
+    <string name="login_username_hint">Input username</string>
+    <string name="hashtag_item">#hashtag item</string>
+    <string name="hashtag_hint">#hashtag hint</string>
+
+    <string name="blank"></string>
+    <string name="enter">Enter</string>
+    <string name="cancel">Cancel</string>
+    <string name="poke">Poke</string>
+    <string name="accept">Accept</string>
+    <string name="close">Close</string>
+    <string name="cucko">Cucko</string>
+    <string name="want_to_meet_you">Want to meet you!</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_hashlist">Hashtag pool</string>
+
+
+    <string name="gcm_defaultSenderId">501068167497</string>
+    <string name="title_activity_maps">Map</string>
+
+</resources>
