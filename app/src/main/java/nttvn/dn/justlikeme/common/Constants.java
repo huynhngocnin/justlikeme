@@ -1,7 +1,7 @@
 package nttvn.dn.justlikeme.common;
 
 /**
- * Created by NinHN on 3/10/16.
+ * Created by NinHN on 3/12/16.
  */
 public class Constants {
 

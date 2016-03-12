@@ -1,8 +1,8 @@
 package nttvn.dn.justlikeme.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -23,7 +23,6 @@ public class LoginActivity extends AppCompatActivity {
 
     // UI references.
     private EditText mName;
-
     private Buddy buddy;
 
     @Override
@@ -33,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         // Set up the login form.
         mName = (EditText) findViewById(R.id.input_name);
 
-        if(checkBuddy()){
+        if (checkBuddy()) {
             registerGCM();
         }
 
@@ -53,6 +52,9 @@ public class LoginActivity extends AppCompatActivity {
         if (buddy != null) {
             mName.setText(buddy.getName());
             return false;
+        } else {
+            Buddy buddy = new Buddy();
+            MyApplication.getInstance().getPrefManager().storeBuddy(buddy);
         }
         return true;
     }
@@ -64,13 +66,14 @@ public class LoginActivity extends AppCompatActivity {
         startService(intent);
     }
 
-    private void updateBuddyName(){
+    private void updateBuddyName() {
         //Update buddy name
         buddy = MyApplication.getInstance().getPrefManager().getBuddy();
         buddy.setName(mName.getText().toString());
         MyApplication.getInstance().getPrefManager().storeBuddy(buddy);
     }
-    private void nextToHashList(){
+
+    private void nextToHashList() {
         //Next to hashlist screen
         Intent intent = new Intent(LoginActivity.this, HashListActivity.class);
         startActivity(intent);

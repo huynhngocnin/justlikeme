@@ -1,76 +1,67 @@
 package nttvn.dn.justlikeme.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.wefika.flowlayout.FlowLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import nttvn.dn.justlikeme.Home;
+import nttvn.dn.justlikeme.MyApplication;
 import nttvn.dn.justlikeme.R;
 import nttvn.dn.justlikeme.common.Constants;
+import nttvn.dn.justlikeme.listener.TaskListener;
+import nttvn.dn.justlikeme.model.Buddy;
+import nttvn.dn.justlikeme.model.Hashtag;
+import nttvn.dn.justlikeme.service.GetListHashTask;
+import nttvn.dn.justlikeme.service.RegisterTask;
 
 /**
- * Created by NinHN on 3/10/16.
+ * Created by NinHN on 3/12/16.
  */
-public class HashListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class HashListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, TaskListener {
 
     private static final String TAG = HashListActivity.class.getSimpleName();
+    public static final int GET_LIST_HASH = 1;
+    public static final int SEND_BUDDY_INFO = 2;
 
     private AutoCompleteTextView autoCompleteTextView;
     private TextView textViewSelected;
-    private Adapter adapter;
 
     private FlowLayout mHashtagContainer;
     private ArrayList<String> hashtagList;
+    private List<Hashtag> buddyHashList = new ArrayList<Hashtag>();
+    private ArrayAdapter adapter;
+    private ProgressDialog progressDialog;
+
+    private Buddy buddy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hashtag);
+        //Call to get list hash hint
+        callListHashHint();
+
+        //Get buddy info
+        buddy = MyApplication.getInstance().getPrefManager().getBuddy();
         // Set up the login form.
         autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.auto_text_input);
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.hashtag_hint, getlistHashHint());
-
-        autoCompleteTextView.setThreshold(1);
-        autoCompleteTextView.setAdapter(adapter);
-
-
-        autoCompleteTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //TODO: Request get hash list
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
         autoCompleteTextView.setOnItemClickListener(this);
 
@@ -81,7 +72,7 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View view) {
                 updateBuddyHash();
-                nextToHome();
+                sendHashUpdateToServer();
             }
         });
     }
@@ -89,18 +80,37 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String selected = ((TextView) view).getText().toString();
-        Toast.makeText(this, "Da chon " + selected, Toast.LENGTH_LONG).show();
-
+        //Toast.makeText(this, "Da chon " + selected, Toast.LENGTH_LONG).show();
         autoCompleteTextView.setText(Constants.BLANK);
-        textViewSelected = addTextViewHash(selected);
-        mHashtagContainer.addView(textViewSelected);
-        applyTaDaAnimation(textViewSelected);
+        if (!hashtagList.contains(selected)) {
+            hashtagList.add(selected);
+            //Add hashListBuddy
+            Hashtag hashbuddy = new Hashtag();
+            hashbuddy.setHash(selected);
+            buddyHashList.add(hashbuddy);
+            textViewSelected = addTextViewHash(selected);
+            mHashtagContainer.addView(textViewSelected);
+            applyTaDaAnimation(textViewSelected);
+        }
     }
 
     private void updateBuddyHash() {
-        //TODO: send hashlist to server
+        buddy.setHashtags(buddyHashList);
+        MyApplication.getInstance().getPrefManager().storeBuddy(buddy);
+    }
 
+    private void sendHashUpdateToServer() {
+        if (progressDialog != null) {
+            progressDialog.cancel();
+        }
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
+        RegisterTask taskRegister = new RegisterTask();
+        taskRegister.addListener(this);
+        taskRegister.execute(buddy);
     }
 
     private void nextToHome() {
@@ -112,9 +122,39 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
         finish();
     }
 
-    private String[] getlistHashHint() {
-        String[] nameList = {"NinHN", "KhanhHT", "LinhDB", "NamNV", "HoangMN"};
-        return nameList;
+
+    private void callListHashHint() {
+        if (progressDialog != null) {
+            progressDialog.cancel();
+        }
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        //Service get all hashtag
+        GetListHashTask taskGetListHash = new GetListHashTask();
+        taskGetListHash.addListener(this);
+        taskGetListHash.execute();
+    }
+
+    @Override
+    public void onResultAvailable(Object... objects) {
+        int type = (Integer) objects[0];
+        if (GET_LIST_HASH == type) {
+
+            List<String> listHash = (List<String>) objects[1];
+
+            adapter = new ArrayAdapter(this, R.layout.hashtag_hint, listHash);
+            autoCompleteTextView.setThreshold(1);
+            autoCompleteTextView.setAdapter(adapter);
+            if (progressDialog != null) {
+                progressDialog.cancel();
+            }
+        } else if (SEND_BUDDY_INFO == type) {
+
+            nextToHome();
+        }
     }
 
     private void setHashtags() {
@@ -127,32 +167,17 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
         }
     }
 
-    private void changeHashtag(View v, String hashtag) {
-
-//        TextView textView = (TextView) v;
-//        //textView.setText(hashtag + " OK");
-//        //textView.setBackgroundResource(R.drawable.round_corners_selected);
-//        if (textView.getContentDescription() == "0") {
-//            textView.setBackgroundColor(getRandomHashtagColor(this));
-//
-//            textView.setContentDescription("1");
-//            applyTaDaAnimation(v);
-//            Snackbar.make(v, "#" + hashtag + " selected", Snackbar.LENGTH_LONG).show();
-//        } else {
-//            textView.setBackgroundColor(0x00000000);
-//            textView.setContentDescription("0");
-//            Snackbar.make(v, "#" + hashtag + " unselect", Snackbar.LENGTH_LONG).show();
-//        }
-    }
-
-    private void removeHash(final View v) {
-
+    private void removeHash(final View v, final String hashtag) {
         applyHideAnimation(v);
+        //Remove listHashCheck
+        hashtagList.remove(hashtag);
+        //Remove listHashBuddy
+        removeHash(hashtag);
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Do something after 5s = 5000ms
+                // Do something after 0.7s
                 mHashtagContainer.removeView(v);
             }
         }, 700);
@@ -166,13 +191,12 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
 
     private ArrayList<String> getHashtagsFromAnySource() {
         ArrayList<String> hashtagList = new ArrayList<>();
-        hashtagList.add("Cheetos");
-        hashtagList.add("Beer");
-        hashtagList.add("Milk");
-        hashtagList.add("CocaCola");
-        hashtagList.add("DairyProducts");
-        hashtagList.add("Soda");
-        hashtagList.add("Cake");
+        if (buddy != null && buddy.getHashtags() != null && buddy.getHashtags().size() > 0) {
+            buddyHashList = buddy.getHashtags();
+            for (Hashtag tag : buddy.getHashtags()) {
+                hashtagList.add(tag.getHash());
+            }
+        }
         return hashtagList;
     }
 
@@ -194,25 +218,23 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
         TextView textView = (TextView) getLayoutInflater().inflate(R.layout.hashtag_item, null);
         textView.setText("#" + hashtag);
         textView.setBackgroundColor(getRandomHashtagColor(this));
-        //textView.setContentDescription("0");
         textView.setLayoutParams(hashTagLayoutParams);
-        textView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    changeHashtag(v, hashtag);
-                }
-                return false;
-            }
-        });
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeHash(v);
+                removeHash(v, hashtag);
             }
         });
         return textView;
     }
 
+    private void removeHash(String hashtag) {
+        for (Hashtag hash : buddyHashList) {
+            if (hash.getHash().equals(hashtag)) {
+                buddyHashList.remove(hash);
+                return;
+            }
+        }
+    }
 
 }

@@ -35,7 +35,6 @@ public class GcmIntentService extends IntentService {
                 registerGCM();
             default:
                 // if key is specified, register with GCM
-
         }
 
     }
@@ -54,7 +53,8 @@ public class GcmIntentService extends IntentService {
             Log.e(TAG, "GCM Registration Token: " + token);
 
             //Save buddy into local
-            Buddy buddy = new Buddy(token, null);
+            Buddy buddy = new Buddy();
+            buddy.setToken(token);
             MyApplication.getInstance().getPrefManager().storeBuddy(buddy);
 
 

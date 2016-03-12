@@ -54,7 +54,9 @@ public class MyPreferenceManager {
             token = pref.getString(KEY_TOKEN_ID, null);
             name = pref.getString(KEY_USER_NAME, null);
 
-            Buddy buddy = new Buddy(token, name);
+            Buddy buddy = new Buddy();
+            buddy.setToken(token);
+            buddy.setName(name);
             return buddy;
         }
         return null;

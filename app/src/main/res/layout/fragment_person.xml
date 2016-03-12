@@ -12,7 +12,8 @@
         android:layout_marginRight="@dimen/person_row_margin"
         android:gravity="center_vertical">
 
-        <View
+        <TextView
+            android:id="@+id/view_new_point"
             android:layout_width="match_parent"
             android:layout_height="@dimen/person_icon_width"
             android:layout_gravity="center"
@@ -23,7 +24,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toLeftOf="@+id/layout_action_right"
+        android:layout_toLeftOf="@+id/layout_action_poke"
         android:layout_toRightOf="@+id/icon_highlight"
         android:orientation="vertical">
 
@@ -51,7 +52,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_action_right"
+        android:id="@+id/layout_action_poke"
         android:layout_width="@dimen/person_poke_weight"
         android:layout_height="@dimen/person_poke_height"
         android:layout_alignParentRight="true"
@@ -59,6 +60,7 @@
         android:background="@drawable/icon_poke_style">
 
         <TextView
+            android:id="@+id/text_poke"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

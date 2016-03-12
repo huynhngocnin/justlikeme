@@ -6,17 +6,26 @@
     android:orientation="vertical"
     android:padding="@dimen/dialog_padding">
 
-
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/text_cucko_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="48dp"
+        android:text="Nin Dep Trai"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="@dimen/person_cucko_name"
+        android:textStyle="bold"
+        android:textColor="@android:color/tab_indicator_text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="48dp"
         android:text="@string/cucko"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/holo_purple"
-        android:textSize="40sp"
+        android:textSize="@dimen/person_cucko_title"
         android:textStyle="bold" />
 
 

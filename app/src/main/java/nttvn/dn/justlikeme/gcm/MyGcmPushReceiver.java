@@ -1,7 +1,5 @@
 package nttvn.dn.justlikeme.gcm;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.gcm.GcmListenerService;
@@ -52,10 +50,7 @@ public class MyGcmPushReceiver extends GcmListenerService {
 //        }
 //
 //        switch (Integer.parseInt(flag)) {
-//            case Config.PUSH_TYPE_CHATROOM:
-//                // push notification belongs to a chat room
-//                processChatRoomPush(title, isBackground, data);
-//                break;
+//
 //            case Config.PUSH_TYPE_USER:
 //                // push notification is specific to user
 //                processUserMessage(title, isBackground, data);
@@ -71,7 +66,6 @@ public class MyGcmPushReceiver extends GcmListenerService {
      * */
     private void processUserMessage(String title, boolean isBackground, String data) {
 //        if (!isBackground) {
-//
 //            try {
 //                JSONObject datObj = new JSONObject(data);
 //
@@ -127,18 +121,18 @@ public class MyGcmPushReceiver extends GcmListenerService {
 //        }
     }
 
-//    /**
-//     * Showing notification with text only
-//     * */
+    /**
+     * Showing notification with text only
+     */
 //    private void showNotificationMessage(Context context, String title, String message, String timeStamp, Intent intent) {
 //        notificationUtils = new NotificationUtils(context);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //        notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
 //    }
-
+//
 //    /**
 //     * Showing notification with text and image
-//     * */
+//     */
 //    private void showNotificationMessageWithBigImage(Context context, String title, String message, String timeStamp, Intent intent, String imageUrl) {
 //        notificationUtils = new NotificationUtils(context);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

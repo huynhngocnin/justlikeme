@@ -11,10 +11,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,16 +38,17 @@ public class Home extends AppCompatActivity {
 
         //Check user exist
         buddy = MyApplication.getInstance().getPrefManager().getBuddy();
-//        if (buddy == null) {
-//            //Next to hashlist screen
-//            Intent intent = new Intent(Home.this, LoginActivity.class);
-//            startActivity(intent);
-//        }
-        //Dummy buddy
         if (buddy == null) {
-            buddy = new Buddy("1234567890", "Nin Dep Trai");
+            //Next to hashlist screen
+            Intent intent = new Intent(Home.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
-        MyApplication.getInstance().getPrefManager().storeBuddy(buddy);
+        //Dummy buddy
+//        if (buddy == null) {
+//            buddy = new Buddy("1234567890", "Nin Dep Trai");
+//        }
+//        MyApplication.getInstance().getPrefManager().storeBuddy(buddy);
 
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -64,7 +64,9 @@ public class Home extends AppCompatActivity {
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setTitle(buddy.getName() + " - nearly " + getString(R.string.action_20m));
+        if (buddy != null && buddy.getName() != null) {
+            getSupportActionBar().setTitle(buddy.getName() + " - nearly " + getString(R.string.action_20m));
+        }
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
