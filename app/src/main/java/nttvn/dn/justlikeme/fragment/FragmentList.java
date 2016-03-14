@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import nttvn.dn.justlikeme.MyApplication;
 import nttvn.dn.justlikeme.R;
 import nttvn.dn.justlikeme.adapter.BuddyAdapter;
+import nttvn.dn.justlikeme.common.Url;
 import nttvn.dn.justlikeme.helper.DividerItemDecoration;
 import nttvn.dn.justlikeme.listener.TaskListener;
 import nttvn.dn.justlikeme.model.Buddy;
@@ -75,10 +76,12 @@ public class FragmentList extends Fragment implements TaskListener {
 
     @Override
     public void onResultAvailable(Object... objects) {
-        buddyArrayList = (ArrayList<Buddy>) objects[0];
-
-        if (progressDialog != null) {
-            progressDialog.cancel();
+        if (Url.KEY_GET_LIST_BUDDY.equals(objects[0])) {
+            buddyArrayList = (ArrayList<Buddy>) objects[1];
+            buddyAdapter.notifyDataSetChanged();
+            if (progressDialog != null) {
+                progressDialog.cancel();
+            }
         }
     }
 }

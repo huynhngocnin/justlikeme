@@ -89,7 +89,7 @@ public class FragmentMaps extends Fragment implements OnMapReadyCallback {
             //Animate Camera to mylocation
             //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curLocation, 20.0f));
 
-            service.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 1, new android.location.LocationListener() {
+            service.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, new android.location.LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
                     if (mMap != null && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)

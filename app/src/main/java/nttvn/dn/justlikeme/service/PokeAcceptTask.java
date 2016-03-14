@@ -34,7 +34,7 @@ public class PokeAcceptTask extends AsyncTask<String, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
         for (TaskListener tl : myListeners) {
-            tl.onResultAvailable(aBoolean);
+            tl.onResultAvailable(Url.KEY_POKE_ACCEPT, aBoolean);
         }
         Log.d("PokeAcceptTask", "Done");
     }

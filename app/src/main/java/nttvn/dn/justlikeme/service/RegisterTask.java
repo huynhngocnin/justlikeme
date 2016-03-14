@@ -10,7 +10,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import nttvn.dn.justlikeme.activity.HashListActivity;
 import nttvn.dn.justlikeme.common.Url;
 import nttvn.dn.justlikeme.listener.TaskListener;
 import nttvn.dn.justlikeme.model.Buddy;
@@ -55,7 +54,7 @@ public class RegisterTask extends AsyncTask<Buddy, Buddy, Buddy> {
     protected void onPostExecute(Buddy buddy) {
         super.onPostExecute(buddy);
         for (TaskListener tl : myListeners) {
-            tl.onResultAvailable(HashListActivity.SEND_BUDDY_INFO, buddy);
+            tl.onResultAvailable(Url.KEY_REGISTER, buddy);
         }
         Log.d("RegisterTask", "Done");
     }

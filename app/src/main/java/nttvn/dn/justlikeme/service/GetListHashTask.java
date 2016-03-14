@@ -9,7 +9,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import nttvn.dn.justlikeme.activity.HashListActivity;
 import nttvn.dn.justlikeme.common.Url;
 import nttvn.dn.justlikeme.listener.TaskListener;
 
@@ -57,7 +56,7 @@ public class GetListHashTask extends AsyncTask<String, Void, List<String>> {
     protected void onPostExecute(List<String> hashtagList) {
         super.onPostExecute(hashtagList);
         for (TaskListener tl : myListeners) {
-            tl.onResultAvailable(HashListActivity.GET_LIST_HASH, hashtagList);
+            tl.onResultAvailable(Url.KEY_GET_LIST_HASH, hashtagList);
         }
         Log.d("GetListHashTask", "Done");
     }
