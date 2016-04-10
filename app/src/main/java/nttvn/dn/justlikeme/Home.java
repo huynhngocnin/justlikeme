@@ -34,8 +34,7 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        
         //Check user exist
         buddy = MyApplication.getInstance().getPrefManager().getBuddy();
         if (buddy == null) {
@@ -44,11 +43,6 @@ public class Home extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        //Dummy buddy
-//        if (buddy == null) {
-//            buddy = new Buddy("1234567890", "Nin Dep Trai");
-//        }
-//        MyApplication.getInstance().getPrefManager().storeBuddy(buddy);
 
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -73,6 +67,8 @@ public class Home extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+
     }
 
     @Override

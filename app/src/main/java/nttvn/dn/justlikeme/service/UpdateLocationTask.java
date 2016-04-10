@@ -35,7 +35,7 @@ public class UpdateLocationTask extends AsyncTask<Buddy, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
         for (TaskListener tl : myListeners) {
-            tl.onResultAvailable(aBoolean);
+            tl.onResultAvailable(Url.KEY_UPDATE_LOCATION, aBoolean);
         }
         Log.d("UpdateLocationTask", "Done");
     }

@@ -38,6 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/login_username_hint"
+                android:singleLine="true"
                 android:textColorHint="@android:color/holo_blue_bright" />
 
         </android.support.design.widget.TextInputLayout>
@@ -50,8 +51,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@android:color/holo_blue_bright"
-        android:textColor="@android:color/white"
-        android:text="@string/enter" />
+        android:text="@string/enter"
+        android:textColor="@android:color/white" />
 
 
     <ProgressBar

@@ -35,7 +35,7 @@ public class GetListBuddyTask extends AsyncTask<Buddy, Void, List<Buddy>> {
     protected void onPostExecute(List<Buddy> buddie) {
         super.onPostExecute(buddie);
         for (TaskListener tl : myListeners) {
-            tl.onResultAvailable(buddie);
+            tl.onResultAvailable(Url.KEY_GET_LIST_BUDDY, buddie);
         }
         Log.d("GetListBuddyTask", "Done");
     }
@@ -49,7 +49,7 @@ public class GetListBuddyTask extends AsyncTask<Buddy, Void, List<Buddy>> {
             //Buddy[] buddies = restTemplate.postForObject(new URI(Url.GET_LIST_BUDDY), params[0], Buddy[].class);
             Object obj = restTemplate.postForObject(new URI(Url.GET_LIST_BUDDY), params[0], Object.class);
             List<Buddy> buddies = (List<Buddy>) obj;
-            Log.d("GetListBuddyTask", "Requested");
+            Log.d("GetListBuddyTask", "Requested and response item : " + buddies.size());
             return buddies;
         } catch (Exception e) {
             Log.e("GetListBuddyTask", e.getMessage(), e);

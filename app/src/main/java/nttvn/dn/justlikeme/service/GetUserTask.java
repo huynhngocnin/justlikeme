@@ -35,7 +35,7 @@ public class GetUserTask extends AsyncTask<String, Void, Buddy> {
     protected void onPostExecute(Buddy buddy) {
         super.onPostExecute(buddy);
         for (TaskListener tl : myListeners) {
-            tl.onResultAvailable(buddy);
+            tl.onResultAvailable(Url.KEY_GET_USER, buddy);
         }
         Log.d("GetUserTask", "Done");
     }

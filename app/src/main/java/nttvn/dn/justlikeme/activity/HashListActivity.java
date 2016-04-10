@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,6 +26,7 @@ import nttvn.dn.justlikeme.Home;
 import nttvn.dn.justlikeme.MyApplication;
 import nttvn.dn.justlikeme.R;
 import nttvn.dn.justlikeme.common.Constants;
+import nttvn.dn.justlikeme.common.Url;
 import nttvn.dn.justlikeme.listener.TaskListener;
 import nttvn.dn.justlikeme.model.Buddy;
 import nttvn.dn.justlikeme.model.Hashtag;
@@ -50,6 +52,7 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
     private ProgressDialog progressDialog;
 
     private Buddy buddy;
+    private Hashtag hashbuddy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +68,10 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
 
         autoCompleteTextView.setOnItemClickListener(this);
 
-        setHashtags();
+        setCurentHashtags();
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.btn_hash_enter);
-        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
+        Button mEnterButton = (Button) findViewById(R.id.btn_hash_enter);
+        mEnterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 updateBuddyHash();
@@ -80,22 +83,27 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String selected = ((TextView) view).getText().toString();
-        //Toast.makeText(this, "Da chon " + selected, Toast.LENGTH_LONG).show();
         autoCompleteTextView.setText(Constants.BLANK);
         if (!hashtagList.contains(selected)) {
+            //Add hashtag to listcheck
             hashtagList.add(selected);
             //Add hashListBuddy
-            Hashtag hashbuddy = new Hashtag();
+            hashbuddy = new Hashtag();
             hashbuddy.setHash(selected);
             buddyHashList.add(hashbuddy);
+            //Create hashtag layout
             textViewSelected = addTextViewHash(selected);
+            //Add hashtag to show screen
             mHashtagContainer.addView(textViewSelected);
+            //Make animation for hashtag to show
             applyTaDaAnimation(textViewSelected);
         }
     }
 
     private void updateBuddyHash() {
         buddy.setHashtags(buddyHashList);
+//        Log.d(TAG, "Store hashtag list = " + buddyHashList.size());
+//        Log.d(TAG, "Get hashtag list from buddy stored= " + buddy.getHashtags().size());
         MyApplication.getInstance().getPrefManager().storeBuddy(buddy);
     }
 
@@ -140,28 +148,24 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onResultAvailable(Object... objects) {
-        int type = (Integer) objects[0];
-        if (GET_LIST_HASH == type) {
-
+        String type = (String) objects[0];
+        if (Url.KEY_GET_LIST_HASH.equals(type)) {
             List<String> listHash = (List<String>) objects[1];
-
             adapter = new ArrayAdapter(this, R.layout.hashtag_hint, listHash);
             autoCompleteTextView.setThreshold(1);
             autoCompleteTextView.setAdapter(adapter);
             if (progressDialog != null) {
                 progressDialog.cancel();
             }
-        } else if (SEND_BUDDY_INFO == type) {
-
+        } else if (Url.KEY_REGISTER.equals(type)) {
             nextToHome();
         }
     }
 
-    private void setHashtags() {
-
+    private void setCurentHashtags() {
         mHashtagContainer = (FlowLayout) findViewById(R.id.hashtag_container);
         hashtagList = getHashtagsFromAnySource();
-
+        Log.d(TAG, "Current hashtag = " + hashtagList.size());
         for (final String hashtag : hashtagList) {
             mHashtagContainer.addView(addTextViewHash(hashtag));
         }
@@ -193,6 +197,7 @@ public class HashListActivity extends AppCompatActivity implements AdapterView.O
         ArrayList<String> hashtagList = new ArrayList<>();
         if (buddy != null && buddy.getHashtags() != null && buddy.getHashtags().size() > 0) {
             buddyHashList = buddy.getHashtags();
+            Log.d(TAG, "Get current hash from buddy store = " + buddy.getHashtags().size());
             for (Hashtag tag : buddy.getHashtags()) {
                 hashtagList.add(tag.getHash());
             }

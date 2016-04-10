@@ -9,8 +9,8 @@ public class Hashtag implements Serializable {
 
     private String id;
     private String hash;
-
     private String type;
+    private String lastUpTime;
 
     public String getId() {
         return id;
@@ -34,5 +34,13 @@ public class Hashtag implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getLastUpTime() {
+        return lastUpTime;
+    }
+
+    public void setLastUpTime(String lastUpTime) {
+        this.lastUpTime = lastUpTime;
     }
 }
